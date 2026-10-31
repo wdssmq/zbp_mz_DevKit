@@ -1,0 +1,19 @@
+[
+  {
+    "name": "固定分组",
+    "fixed": true,
+    "desc": "这里设置需要一直启用的插件",
+    "list": [
+      "AppCentre",
+      "mz_DevKit"
+    ]
+  },
+  {
+    "name": "精简分组",
+    "desc": "请根据实际情况设置",
+    "list": [
+      "mz_BrowserSync",
+      "mzGrunt"
+    ]
+  }
+]

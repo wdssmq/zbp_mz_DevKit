@@ -1,0 +1,41 @@
+/* 二级菜单拆分与折叠 */
+
+.js-SubMenu {
+  bottom: -37px;
+  display: block;
+  margin-bottom: 0;
+  max-width: 50%;
+  position: absolute;
+  right: 12px;
+}
+
+.js-SubMenu li {
+  float: right;
+}
+
+.js-SubMenu.hidden {
+  display: none;
+}
+
+/* 插件管理页「最近使用」 */
+
+.mz-his {
+  box-shadow: 0 0 0.1em rgb(0 0 0 / 30%);
+  padding: 0.5em 1em;
+  margin-bottom: 0.8em;
+}
+
+.mz-focus {
+  background-color: #ffffdd !important;
+  border: 1px dashed #ff0000;
+}
+
+a.mz-his-link {
+  font-size: 14px;
+  margin-right: 4px;
+  margin-bottom: 3px;
+  background-color: #eee;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 0 3px;
+}
