@@ -1,15 +1,18 @@
 <?php
 require '../../../zb_system/function/c_system_base.php';
+
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action = 'root';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6);
-    die();
+
+    exit();
 }
 if (!$zbp->CheckPlugin('mz_DevKit')) {
     $zbp->ShowError(48);
-    die();
+
+    exit();
 }
 
 $act = GetVars('act', 'GET');
@@ -18,43 +21,46 @@ $suc = GetVars('suc', 'GET');
 // 确保二级菜单配置文件存在
 mz_DevKit_InitCfg();
 
-if ($act == 'save') {
+if ('save' == $act) {
     // 二级菜单排序结果的异步保存
     $data = GetVars('data', 'POST');
-    if ($data !== null) {
+    if (null !== $data) {
         file_put_contents(mz_DevKit_Path('config'), $data);
-        echo "ok";
-        die();
+        echo 'ok';
+
+        exit();
     }
 
     // 表单提交
     CheckIsRefererValid();
     // 修改编辑器
-    $edt = GetVars("read_edt", "POST");
+    $edt = GetVars('read_edt', 'POST');
     mz_DevKit_SetCurEdt($edt);
     // 切换插件启用
-    $switch = GetVars("read_switch", "POST");
-    $switchTo = GetVars("read_switchTo", "POST");
-    if ($switch == 1) {
+    $switch = GetVars('read_switch', 'POST');
+    $switchTo = GetVars('read_switchTo', 'POST');
+    if (1 == $switch) {
         mz_DevKit_PlugGroupSwitch($switchTo);
     }
     // 保存配置项
     foreach ($_POST as $key => $val) {
-        if (substr($key, 0, 5) == 'read_') {
+        if ('read_' == substr($key, 0, 5)) {
             continue;
         }
-        $zbp->Config('mz_DevKit')->$key = trim($val);
+        $zbp->Config('mz_DevKit')->{$key} = trim($val);
     }
     $zbp->SaveConfig('mz_DevKit');
     $zbp->BuildTemplate();
     $zbp->SetHint('good');
-    Redirect('./main.php' . ($suc == null ? '' : "?act={$suc}"));
+    Redirect('./main.php' . (null == $suc ? '' : "?act={$suc}"));
 }
 
 $cfgPlugGroup = mz_DevKit_GetPlugGroupCFG();
 
 $blogtitle = '开发工具箱';
+
 require $blogpath . 'zb_system/admin/admin_header.php';
+
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
@@ -65,7 +71,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <a href="main.php" title="首页"><span class="m-left m-now">首页</span></a>
     </div>
     <div id="divMain2">
-        <form action="<?php echo BuildSafeURL("main.php?act=save"); ?>" method="post">
+        <form action="<?php echo BuildSafeURL('main.php?act=save'); ?>" method="post">
             <table width="100%" class="tableBorder">
                 <tr>
                     <th width="10%">项目</th>
@@ -81,12 +87,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <td>切换插件启用</td>
                     <td>
                         <?php if ($cfgPlugGroup->hasGroup) {
-                            echo mz_DevKit_BuildPlugGroupForm($cfgPlugGroup, 0);
-                            echo '<label for="read_switch">执行切换：</label>';
-                            echo zbpform::zbradio('read_switch', 0);
-                        } else {
-                            echo '无分组配置，请复制一份 /usr_cfg/plugin-group.json 到 /usr/plugin-group.json';
-                        } ?>
+    echo mz_DevKit_BuildPlugGroupForm($cfgPlugGroup, 0);
+    echo '<label for="read_switch">执行切换：</label>';
+    echo zbpform::zbradio('read_switch', 0);
+} else {
+    echo '无分组配置，请复制一份 /usr_cfg/plugin-group.json 到 /usr/plugin-group.json';
+} ?>
                     </td>
                     <td>
                         启用「指定分组 + 固定分组」中的插件，停用其他插件
